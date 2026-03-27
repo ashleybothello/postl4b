@@ -55,8 +55,8 @@ let students = [
 
 let nextId = 6;
 
-// GET /students -> Get all students (with optional filters)
-app.get('/students', (req, res) => {
+// GET /api/students -> Get all students (with optional filters)
+app.get('/api/students', (req, res) => {
     let result = [...students];
 
     // Filter by branch
@@ -85,15 +85,15 @@ app.get('/students', (req, res) => {
     res.json(result);
 });
 
-// GET /students/:id -> Get a specific student
-app.get('/students/:id', (req, res) => {
+// GET /api/students/:id -> Get a specific student
+app.get('/api/students/:id', (req, res) => {
     const student = students.find(s => s.id === parseInt(req.params.id));
     if (!student) return res.status(404).json({ error: 'Student not found' });
     res.json(student);
 });
 
-// POST /students -> Add a new student
-app.post('/students', (req, res) => {
+// POST /api/students -> Add a new student
+app.post('/api/students', (req, res) => {
     const { name, branch, year } = req.body;
     if (!name || !branch || !year) {
         return res.status(400).json({ error: 'Name, branch, and year are required' });
@@ -105,8 +105,8 @@ app.post('/students', (req, res) => {
     res.status(201).json(newStudent);
 });
 
-// PATCH /students/:id -> Update student details
-app.patch('/students/:id', (req, res) => {
+// PATCH /api/students/:id -> Update student details
+app.patch('/api/students/:id', (req, res) => {
     const student = students.find(s => s.id === parseInt(req.params.id));
     if (!student) return res.status(404).json({ error: 'Student not found' });
 
@@ -120,8 +120,8 @@ app.patch('/students/:id', (req, res) => {
     res.json(student);
 });
 
-// DELETE /students/:id -> Delete a student
-app.delete('/students/:id', (req, res) => {
+// DELETE /api/students/:id -> Delete a student
+app.delete('/api/students/:id', (req, res) => {
     const idx = students.findIndex(s => s.id === parseInt(req.params.id));
     if (idx === -1) return res.status(404).json({ error: 'Student not found' });
 
@@ -131,16 +131,21 @@ app.delete('/students/:id', (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-    console.log('');
-    console.log('  ╔═══════════════════════════════════════════╗');
-    console.log('  ║   StudentRecords API — Command Center     ║');
-    console.log('  ║   CRCE • Dept. of Computer Engineering    ║');
-    console.log(`  ║   Server running: http://localhost:${PORT}     ║`);
-    console.log('  ╚═══════════════════════════════════════════╝');
-    console.log('');
-    console.log(`  ${students.length} students loaded into memory`);
-    console.log('  Endpoints: GET, POST, PATCH, DELETE /students');
-    console.log('  Filters: ?branch, ?year, ?search');
-    console.log('');
-});
+// Start server locally, export for Vercel
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log('');
+        console.log('  ╔═══════════════════════════════════════════╗');
+        console.log('  ║   StudentRecords API — Command Center     ║');
+        console.log('  ║   CRCE • Dept. of Computer Engineering    ║');
+        console.log(`  ║   Server running: http://localhost:${PORT}     ║`);
+        console.log('  ╚═══════════════════════════════════════════╝');
+        console.log('');
+        console.log(`  ${students.length} students loaded into memory`);
+        console.log('  Endpoints: GET, POST, PATCH, DELETE /api/students');
+        console.log('  Filters: ?branch, ?year, ?search');
+        console.log('');
+    });
+}
+
+module.exports = app;
