@@ -10,16 +10,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-// Serve front-end at root for local and Vercel
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Optional: SPA fallback for client side routes
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
 // Request logger with colors
 app.use((req, res, next) => {
     const start = Date.now();
