@@ -2,7 +2,7 @@
 //  StudentRecords API — NEXUS Terminal Engine
 // =============================================
 
-const API_URL = '/students';
+const API_URL = '/api/students';
 
 // ============ DOM ELEMENTS ============
 const $ = id => document.getElementById(id);
