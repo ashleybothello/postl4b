@@ -25,7 +25,7 @@ const parseBody = async (req) => {
   return req.body;
 };
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   try {
     const url = new URL(req.url, `http://${req.headers.host}`);
     const trailing = url.pathname.replace(/^\/api/, '');
